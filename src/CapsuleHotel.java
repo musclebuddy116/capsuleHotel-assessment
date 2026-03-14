@@ -121,12 +121,15 @@ public class CapsuleHotel {
                     success = handleCheckOut(console);
                     break;
                 case "3":
+                    System.out.println("\nView Guests");
+                    System.out.println("===========");
+                    viewGuests(console);
                     break;
                 case "4":
                     exit = true;
                     break;
                 default:
-                    System.out.println("I don't recognize that option. Please try again.");
+                    System.out.println("\nI don't recognize that option. Please try again.");
             }
 
         } while (!exit);
@@ -174,13 +177,13 @@ public class CapsuleHotel {
         int capsuleNum = readInt(console, "Capsule #[1-" + capsulesAvailable + "]: ");
         int capsuleI = capsuleNum - 1;
 
-        if (capsuleI < 0 || capsuleI >= capsulesAvailable) {
-            System.out.println("Error :(");
+        if (capsuleNum < 1 || capsuleNum > capsulesAvailable) {
+            System.out.println("\nError :(");
             System.out.println("Capsule #" + capsuleNum + " does not exist");
             return false;
         }
         if (capsules[capsuleI] != null) {
-            System.out.println("Error :(");
+            System.out.println("\nError :(");
             System.out.println("Capsule #" + capsuleNum + " is occupied.");
             return false;
         } else {
@@ -219,15 +222,15 @@ public class CapsuleHotel {
         }
 
         if (isEmpty) {
-            System.out.println("Sorry... check out is only available if there's at least one guest.");
+            System.out.println("\nSorry... check out is only available if there's at least one guest.");
             return false;
         }
 
         int capsuleNum = readInt(console, "Capsule #[1-" + capsulesAvailable + "]: ");
         int capsuleI = capsuleNum - 1;
 
-        if (capsuleI < 0 || capsuleI >= capsulesAvailable) {
-            System.out.println("Error :(");
+        if (capsuleNum < 1 || capsuleNum > capsulesAvailable) {
+            System.out.println("\nError :(");
             System.out.println("Capsule #" + capsuleNum + " does not exist");
             return false;
         }
@@ -236,11 +239,11 @@ public class CapsuleHotel {
             String guestName = capsules[capsuleI];
             capsules[capsuleI] = null;
 
-            System.out.println("Success :)");
+            System.out.println("\nSuccess :)");
             System.out.printf("%s checked out from capsule #%d\n", guestName, capsuleNum);
             return true;
         } else {
-            System.out.println("Error :(");
+            System.out.println("\nError :(");
             System.out.println("Capsule #" + capsuleNum + " is unoccupied");
             return false;
         }
@@ -275,6 +278,32 @@ public class CapsuleHotel {
      */
     public static void viewGuests(Scanner console) {
         int capsuleNum = readInt(console, "Capsule #[1-" + capsulesAvailable + "]: ");
-        int capsuleI = capsuleNum - 1;
+
+        if (capsuleNum < 1 || capsuleNum > capsulesAvailable) {
+            System.out.println("\nError :(");
+            System.out.println("Capsule #" + capsuleNum + " does not exist");
+            return;
+        }
+
+        int startNum, endNum;
+        if (capsulesAvailable < 11) { // Less than 11 capsules available; print all capsules
+            startNum = 1;
+            endNum = capsulesAvailable;
+        } else if (capsuleNum - 5 < 1) { // Number at beginning, print first 11
+            startNum = 1;
+            endNum = 11;
+        } else if (capsuleNum + 5 > capsulesAvailable) { // Number at end, print last 11
+            startNum = capsulesAvailable - 10;
+            endNum = capsulesAvailable;
+        } else { // Number in middle, print 5 before and 5 after
+            startNum = capsuleNum - 5;
+            endNum = capsuleNum + 5;
+        }
+        int startI = startNum - 1, endI = endNum - 1;
+
+        System.out.println("Capsule: Guest");
+        for (int i = startI; i <= endI; i++) {
+            System.out.printf("%d: %s\n", i+1, (capsules[i] != null) ? capsules[i] : "[unoccupied]");
+        }
     }
 }
