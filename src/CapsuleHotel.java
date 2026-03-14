@@ -15,6 +15,8 @@ import java.util.function.DoubleToIntFunction;
  */
 
 public class CapsuleHotel {
+    public static int capsulesAvailable;
+    public static String[] capsules;
 
     public static void main(String[] args) {
 
@@ -25,10 +27,10 @@ public class CapsuleHotel {
         System.out.println("=====================");
 
         // Prompt user to enter the number of capsules available
-        int capsulesAvailable = readInt(console, "Please enter the number of capsules available for today: ");
+        capsulesAvailable = readInt(console, "Please enter the number of capsules available for today: ");
 
         // Create string array for capsules with the specified capacity
-        String[] capsules = new String[capsulesAvailable];
+        capsules = new String[capsulesAvailable];
 
         System.out.println("There are " + capsules.length + " unoccupied capsules ready to be booked.");
 
@@ -106,7 +108,10 @@ public class CapsuleHotel {
 
             switch (option) {
                 case "1":
-                    System.out.println("1");
+                    System.out.println("\nGuest Check In");
+                    System.out.println("==============");
+                    String guestName = readString(console,"Guest Name: ");
+                    boolean success = handleCheckIn(console, guestName);
                     break;
                 case "2":
                     break;
@@ -143,5 +148,45 @@ public class CapsuleHotel {
         String option = readString(console, "Choose an option [1-4]: ");
 
         return option;
+    }
+
+    /**
+     * Method Name: handleCheckIn
+     * The handleCheckIn method is designed to facilitate the check-in process for guests into capsules.
+     * It takes a Scanner object for user input and a String representing the guest's name.
+     * The method returns a boolean value indicating the success or failure of the check-in process.
+     * @param console the Scanner object to use for input
+     * @param guestName the name of the guest being checked in
+     * @return boolean the status (success/fail) of the check in
+     * If the capsule number does not exist the user should see the following error message:
+     * Error :(
+     * Capsule #9 does not exist. (9 is an example, should be replaced by the capsule number the user tries to input)
+     * If the Guest is successfully booked the user should see the following success message:
+     * Success :)
+     * John is booked in capsule #3 (John and 3 are examples, they should be replaced by the user inputs)
+     * If the capsule is occupied the user should see the following error message:
+     * Error :(
+     * Capsule #5 is occupied. (5 is an example, should be replaced by the capsule number the user tries to input)
+     */
+
+    public static boolean handleCheckIn(Scanner console, String guestName) {
+        int capsuleNum = readInt(console, "Capsule #[1-" + capsulesAvailable + "]: ");
+        int capsuleI = capsuleNum - 1;
+
+        if (capsuleI < 0 || capsuleI >= capsulesAvailable) {
+            System.out.println("Error :(");
+            System.out.println("Capsule #" + capsuleNum + " does not exist");
+            return false;
+        }
+        if (capsules[capsuleI] != null) {
+            System.out.println("Error :(");
+            System.out.println("Capsule #" + capsuleNum + " is occupied.");
+            return false;
+        }
+        // Shouldn't reach this code unless capsule is a valid option
+        capsules[capsuleI] = guestName;
+        System.out.println("\nSuccess :)");
+        System.out.printf("%s is booked in capsule #%d\n", guestName, capsuleNum);
+        return true;
     }
 }
