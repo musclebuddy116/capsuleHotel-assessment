@@ -37,8 +37,6 @@ public class CapsuleHotel {
         // Display menu
         menu(console);
 
-
-
     }
 
     /**
@@ -100,6 +98,11 @@ public class CapsuleHotel {
 
     }
 
+    /**
+     * method to handle menu display and options.
+     * @param console the Scanner object to use for input
+     */
+
     public static void menu(Scanner console) {
         boolean exit = false;
 
@@ -129,7 +132,6 @@ public class CapsuleHotel {
     }
 
     /**
-     * Method Name: getMenuOption
      * The getMenuOption method is designed to display a simple menu for a guest system and prompt the user to choose an option.
      * It takes a Scanner object as a parameter to read user input and returns the selected option as a String.
      * @param console the Scanner object to use for input
@@ -151,13 +153,12 @@ public class CapsuleHotel {
     }
 
     /**
-     * Method Name: handleCheckIn
      * The handleCheckIn method is designed to facilitate the check-in process for guests into capsules.
      * It takes a Scanner object for user input and a String representing the guest's name.
      * The method returns a boolean value indicating the success or failure of the check-in process.
      * @param console the Scanner object to use for input
      * @param guestName the name of the guest being checked in
-     * @return boolean the status (success/fail) of the check in
+     * @return boolean the status (success/fail) of the check in.
      * If the capsule number does not exist the user should see the following error message:
      * Error :(
      * Capsule #9 does not exist. (9 is an example, should be replaced by the capsule number the user tries to input)
