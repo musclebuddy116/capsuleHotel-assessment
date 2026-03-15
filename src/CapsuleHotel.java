@@ -37,6 +37,9 @@ public class CapsuleHotel {
         // Display menu
         menu(console);
 
+        // Once menu has returned
+        System.out.println("\nGoodbye!");
+
     }
 
     /**
@@ -104,10 +107,12 @@ public class CapsuleHotel {
         boolean exit = false;
 
         do {
+            // Get user option
             String option = getMenuOption(console);
 
             boolean success;
 
+            // Handle option selection
             switch (option) {
                 case "1":
                     System.out.println("\nGuest Check In");
@@ -126,7 +131,9 @@ public class CapsuleHotel {
                     viewGuests(console);
                     break;
                 case "4":
-                    exit = true;
+                    System.out.println("\nExit");
+                    System.out.println("====");
+                    exit = confirmExit(console);
                     break;
                 default:
                     System.out.println("\nI don't recognize that option. Please try again.");
@@ -177,16 +184,16 @@ public class CapsuleHotel {
         int capsuleNum = readInt(console, "Capsule #[1-" + capsulesAvailable + "]: ");
         int capsuleI = capsuleNum - 1;
 
-        if (capsuleNum < 1 || capsuleNum > capsulesAvailable) {
+        if (capsuleNum < 1 || capsuleNum > capsulesAvailable) { // Capsule selected is out of bounds
             System.out.println("\nError :(");
             System.out.println("Capsule #" + capsuleNum + " does not exist");
             return false;
         }
-        if (capsules[capsuleI] != null) {
+        if (capsules[capsuleI] != null) { // Capsule is not empty
             System.out.println("\nError :(");
             System.out.println("Capsule #" + capsuleNum + " is occupied.");
             return false;
-        } else {
+        } else { // Capsule is empty; fill with guest
             capsules[capsuleI] = guestName;
             System.out.println("\nSuccess :)");
             System.out.printf("%s is booked in capsule #%d\n", guestName, capsuleNum);
@@ -198,7 +205,7 @@ public class CapsuleHotel {
      * Method Name: handleCheckOut
      * The handleCheckOut method is designed to manage the check-out process for guests from capsules. It takes a Scanner object for user input and returns a boolean value indicating the success or failure of the check-out process.
      * @param console the Scanner object to use for input
-     * @return boolean
+     * @return boolean the status (success/fail) of the check in.
      * If no guests are checked into the hotel the user should see the following error message:
      * Sorry... check out is only available if there's at least one guest.
      * If the capsule number does not exist the user should see the following error message:
@@ -214,6 +221,7 @@ public class CapsuleHotel {
     public static boolean handleCheckOut(Scanner console) {
         boolean isEmpty = true;
 
+        // Check for guests
         for (int i = 0; i < capsules.length; i++) {
             if (capsules[i] != null) { // There is a guest
                 isEmpty = false;
@@ -221,7 +229,7 @@ public class CapsuleHotel {
             }
         }
 
-        if (isEmpty) {
+        if (isEmpty) { // No guests
             System.out.println("\nSorry... check out is only available if there's at least one guest.");
             return false;
         }
@@ -229,20 +237,20 @@ public class CapsuleHotel {
         int capsuleNum = readInt(console, "Capsule #[1-" + capsulesAvailable + "]: ");
         int capsuleI = capsuleNum - 1;
 
-        if (capsuleNum < 1 || capsuleNum > capsulesAvailable) {
+        if (capsuleNum < 1 || capsuleNum > capsulesAvailable) { // Capsule selected is out of bounds
             System.out.println("\nError :(");
             System.out.println("Capsule #" + capsuleNum + " does not exist");
             return false;
         }
 
-        if (capsules[capsuleI] != null) {
+        if (capsules[capsuleI] != null) { // Capsule is occupied; remove guest from capsule
             String guestName = capsules[capsuleI];
             capsules[capsuleI] = null;
 
             System.out.println("\nSuccess :)");
             System.out.printf("%s checked out from capsule #%d\n", guestName, capsuleNum);
             return true;
-        } else {
+        } else { // Capsule is empty
             System.out.println("\nError :(");
             System.out.println("Capsule #" + capsuleNum + " is unoccupied");
             return false;
@@ -278,13 +286,15 @@ public class CapsuleHotel {
      */
     public static void viewGuests(Scanner console) {
         int capsuleNum = readInt(console, "Capsule #[1-" + capsulesAvailable + "]: ");
+        // Don't need capsuleI for this method
 
-        if (capsuleNum < 1 || capsuleNum > capsulesAvailable) {
+        if (capsuleNum < 1 || capsuleNum > capsulesAvailable) { // Capsule selected is out of bounds
             System.out.println("\nError :(");
             System.out.println("Capsule #" + capsuleNum + " does not exist");
             return;
         }
 
+        // Determine range of capsules to display
         int startNum, endNum;
         if (capsulesAvailable < 11) { // Less than 11 capsules available; print all capsules
             startNum = 1;
@@ -301,9 +311,32 @@ public class CapsuleHotel {
         }
         int startI = startNum - 1, endI = endNum - 1;
 
-        System.out.println("Capsule: Guest");
+        System.out.println("\nCapsule: Guest");
         for (int i = startI; i <= endI; i++) {
             System.out.printf("%d: %s\n", i+1, (capsules[i] != null) ? capsules[i] : "[unoccupied]");
+        }
+    }
+
+    /**
+     * Method Name: confirmExit
+     * The confirmExit method is designed to prompt the user for confirmation before exiting a program.
+     * It takes a Scanner object for user input and returns a boolean value indicating whether the user wants to proceed with the exit.
+     * @param console the Scanner object to use for input
+     * @return boolean whether the user wants to proceed with the exit.
+     * if the user enters y or Y the method should return true, otherwise it should return false.
+     */
+
+    public static boolean confirmExit(Scanner console) {
+        System.out.println("Are you sure you want to exit?");
+        System.out.println("All data will be lost.");
+        String input = readString(console, "Exit[y/n]: ");
+
+        switch (input) {
+            case "y":
+            case "Y":
+                return true;
+            default:
+                return false;
         }
     }
 }
